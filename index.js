@@ -14,14 +14,14 @@ app.get('/', function(request, response) {
 
 app.get('/fileserver/*', function(request, response) {
     console.log("`"+url.parse(request.url).pathname+"` hit")
-    var uri = url.parse(request.url).pathname.replace("/fileserver","");
+    var uri = url.parse(request.url).pathname.replace("/fileserver","/content");
     console.log("uri",uri);
     var filename = path.join(process.cwd(), uri);
     console.log("filename",filename);
     path.exists(filename, function(exists) {
-        if(!exists || uri == "/") {
+        if(!exists || uri == "/content/") {
             response.writeHead(404, {"Content-Type": "text/plain"});
-            response.end("404 `"+filename+"` not found");
+            response.end("404: no file found at `"+filename+"`");
             return;
         }
 
