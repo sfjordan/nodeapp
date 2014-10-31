@@ -14,5 +14,6 @@
   },
   "repository": {
     "type": "git",
-  }
+  },
+  "license": "MIT"
 }
