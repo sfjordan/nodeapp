@@ -1,7 +1,7 @@
 {
-  "name": "node-js-getting-started",
-  "version": "0.1.2",
-  "description": "A sample Node.js app using Express 4",
+  "name": "nodeapp",
+  "version": "0.0.1",
+  "description": "A simple fileserver for my iOS app",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -14,12 +14,5 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
-  },
-  "keywords": [
-    "node",
-    "heroku",
-    "express"
-  ],
-  "license": "MIT"
+  }
 }
