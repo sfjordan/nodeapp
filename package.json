@@ -1,7 +1,7 @@
 {
   "name": "nodeapp",
   "version": "0.0.1",
-  "description": "A simple fileserver for my iOS app",
+  "description": "A simple fileserver for my iOS",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -14,6 +14,11 @@
   },
   "repository": {
     "type": "git",
+    "url": "https://github.com/sfjordan/nodeapp"
   },
-  "license": "MIT"
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
 }
