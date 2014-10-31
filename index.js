@@ -13,25 +13,27 @@ app.get('/', function(request, response) {
 })
 
 app.get('/fileserver/*', function(request, response) {
+    console.log("--= SERVER =--")
     console.log("`"+url.parse(request.url).pathname+"` hit")
     var uri = url.parse(request.url).pathname.replace("/fileserver","/content");
-    console.log("uri",uri);
     var filename = path.join(process.cwd(), uri);
-    console.log("filename",filename);
-    path.exists(filename, function(exists) {
+    fs.exists(filename, function(exists) {
         if(!exists || uri == "/content/") {
+            console.log("returning 404 not found")
             response.writeHead(404, {"Content-Type": "text/plain"});
-            response.end("404: no file found at `"+filename+"`");
+            response.end("404: cannot find file `"+uri+"` in fileserver.");
             return;
         }
 
         fs.readFile(filename, "binary", function(err, file) {
             if(err) {
+                console.log("returning 500 err")
                 response.writeHead(500, {"Content-Type": "text/plain"});
                 response.end(err);
                 return;
             }
 
+            console.log("returning 200 ok")
             response.writeHead(200);
             response.end(file, "binary");
         });
