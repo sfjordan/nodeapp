@@ -1,37 +1,16 @@
-var sys = require("sys"),
-    http = require("http"),
-    url = require("url"),
-    path = require("path"),
-    fs = require("fs");
+var express = require('express')
+var app = express();
+var counter = 0;
 
-http.createServer(function(request, response) {
-    var uri = url.parse(request.url).pathname;
-    console.log("uri",uri);
-    if (uri == "/") {
-        response.writeHead(500, {"Content-Type": "text/plain"});
-        response.end("Hello, World; Empty path!");
-        return;
-    }
-    var filename = path.join(process.cwd(), uri);
-    console.log("filename",filename);
-    path.exists(filename, function(exists) {
-        if(!exists) {
-            response.writeHead(404, {"Content-Type": "text/plain"});
-            response.end("404 Not Foundn");
-            return;
-        }
+app.set('port', (process.env.PORT || 5000))
+app.use(express.static(__dirname + '/public'))
 
-        fs.readFile(filename, "binary", function(err, file) {
-            if(err) {
-                response.writeHead(500, {"Content-Type": "text/plain"});
-                response.end(err + "n");
-                return;
-            }
+app.get('/', function(request, response) {
+  response.send('Hello World!')
+  console.log("console test", counter)
+  counter++;
+})
 
-            response.writeHead(200);
-            response.end(file, "binary");
-        });
-    });
-}).listen(5000);
-
-console.log("Server running at http://localhost:8080/");
+app.listen(app.get('port'), function() {
+  console.log("Node app is running at localhost:" + app.get('port'))
+})
