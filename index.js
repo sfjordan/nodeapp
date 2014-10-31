@@ -9,9 +9,11 @@ app.use(express.static(__dirname + '/public'))
 
 app.get('/', function(request, response) {
   response.send('Hello World!')
+  console.log("`/` hit")
 })
 
 app.get('/fileserver/*', function(request, response) {
+    console.log("`"+url.parse(request.url).pathname+"` hit")
     var uri = url.parse(request.url).pathname.replace("/fileserver","");
     console.log("uri",uri);
     var filename = path.join(process.cwd(), uri);
