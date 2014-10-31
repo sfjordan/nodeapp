@@ -11,6 +11,13 @@ app.get('/', function(request, response) {
   counter++;
 })
 
+app.get('fileserver/', function(request, response) {
+    var uri = url.parse(request.url).pathname;
+    console.log("uri",uri);
+    var filename = path.join(process.cwd(), uri);
+    console.log("filename",filename);
+}
+
 app.listen(app.get('port'), function() {
-  console.log("Node app is running at localhost:" + app.get('port'))
+  console.log("Node app is running at port:" + app.get('port'))
 })
