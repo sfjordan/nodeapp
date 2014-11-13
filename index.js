@@ -8,15 +8,18 @@ var url = require("url"),
 app.set('port', (process.env.PORT || 5000))
 app.use(express.static(__dirname + '/public'))
 
-console.log("dbURL: ",process.env.DATABASE_URL);
 app.get('/db', function (request, response) {
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     client.query('SELECT * FROM test_table', function(err, result) {
       done();
       if (err)
        { console.error(err); response.send("Error " + err); }
-      else
-       { response.send(result.rows); }
+      else {
+        var str = JSON.stringify(result.rows).split(']')[0].split('[')[1]
+        var retstr = '{"activeUsers":['+str+']}'
+        console.log("retstr", str)
+        response.send(retstr);
+        }
     });
   });
 })
