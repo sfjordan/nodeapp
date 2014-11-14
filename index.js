@@ -1,14 +1,20 @@
 var express = require('express')
 var app = express();
 var url = require("url"),
+    bodyParser = require('body-parser'),
     path = require("path"),
     pg = require('pg'),
     fs = require("fs");
+
+// parse application/json
+app.use(bodyParser.json())
+
 
 app.set('port', (process.env.PORT || 5000))
 app.use(express.static(__dirname + '/public'))
 
 app.get('/db', function (request, response) {
+  //console.log('request',request)
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     client.query('SELECT * FROM test_table', function(err, result) {
       done();
@@ -23,6 +29,25 @@ app.get('/db', function (request, response) {
     });
   });
 })
+var person = {
+  firstname: 'sam',
+  lastname: 'jordan'
+}
+var personstr = JSON.stringify(person)
+//console.log(personstr)
+
+app.post('/db', function (request, response) {
+  //var data = JSON.parse()
+  console.log(request.data)
+  console.log(request.body)
+  // console.log(request)
+  response.send('hi')
+})
+
+// app.post('/api/users', jsonParser, function (req, res) {
+//   if (!req.body) return res.sendStatus(400)
+//   // create user in req.body
+// })
 
 app.get('/', function(request, response) {
   response.send('Hello World!')
