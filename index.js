@@ -4,7 +4,8 @@ var url = require("url"),
     bodyParser = require('body-parser'),
     path = require("path"),
     pg = require('pg'),
-    fs = require("fs");
+    fs = require("fs"),
+    dbname = "tigertidal";
 
 // parse application/json
 app.use(bodyParser.json())
@@ -16,7 +17,7 @@ app.use(express.static(__dirname + '/public'))
 app.get('/db', function (request, response) {
   //console.log('request',request)
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-    client.query('SELECT * FROM test_table', function(err, result) {
+    client.query('SELECT * FROM tigertidal', function(err, result) {
       done();
       if (err)
        { console.error(err); response.send("Error " + err); }
@@ -29,25 +30,43 @@ app.get('/db', function (request, response) {
     });
   });
 })
-var person = {
-  firstname: 'sam',
-  lastname: 'jordan'
-}
-var personstr = JSON.stringify(person)
-//console.log(personstr)
 
 app.post('/db', function (request, response) {
-  //var data = JSON.parse()
-  console.log(request.data)
-  console.log(request.body)
-  // console.log(request)
-  response.send('hi')
+  var firstname = request.body.firstname
+  var lastname = request.body.lastname
+  var longitude = request.body.longitude
+  var latitude = request.body.latitude
+  var updatestr = "UPDATE "+dbname+" set longitude="+longitude+", latitude="+latitude
+  updatestr += " WHERE firstname like '"+firstname+"' and lastname like '"+lastname+"';"
+  var insertstr = "INSERT INTO tigertidal (firstname, lastname, longitude, latitude)"
+  insertstr += " SELECT '"+firstname+"', '"+lastname+"', "+longitude+", "+latitude
+  insertstr += " WHERE NOT EXISTS (SELECT 1 FROM "+dbname+" WHERE firstname like '"+firstname+"' and lastname like '"+lastname+"');"
+  var flag = false;
+  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+    client.query( updatestr, function(err, result) {
+      done();
+      if (err) {
+        console.error(err); response.send("Error: "+err)
+      }
+      else {
+        flag = true;
+      }
+    });
+    client.query( insertstr, function(err, result) {
+      done();
+      if (err) {
+        console.error(err); response.send("Error: "+err)
+      }
+      else {
+        flag = true;
+      }
+    });
+  });
+  if (flag)
+    response.status(200).end();
+  else response.status(500).end();
+  response.send();
 })
-
-// app.post('/api/users', jsonParser, function (req, res) {
-//   if (!req.body) return res.sendStatus(400)
-//   // create user in req.body
-// })
 
 app.get('/', function(request, response) {
   response.send('Hello World!')
