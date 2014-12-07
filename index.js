@@ -4,8 +4,7 @@ var url = require("url"),
     bodyParser = require('body-parser'),
     path = require("path"),
     pg = require('pg'),
-    fs = require("fs"),
-    dbname = "tigertidal";
+    fs = require("fs");
 
 // parse application/json
 app.use(bodyParser.json())
@@ -32,6 +31,7 @@ app.get('/db', function (request, response) {
 })
 
 app.post('/db', function (request, response) {
+  var dbname = "tigertidal"
   var firstname = request.body.firstname
   var lastname = request.body.lastname
   var longitude = request.body.longitude
