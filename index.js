@@ -14,7 +14,7 @@ app.set('port', (process.env.PORT || 5000))
 app.use(express.static(__dirname + '/public'))
 
 app.get('/db', function (request, response) {
-  //console.log('request',request)
+  //console.log('request',reques    t)
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     client.query('SELECT * FROM tigertidal', function(err, result) {
       done();
@@ -36,12 +36,18 @@ app.post('/db', function (request, response) {
   var lastname = request.body.lastname
   var longitude = request.body.longitude
   var latitude = request.body.latitude
+  console.log("fname:",firstname)
+  console.log("lname:",lastname)
+  console.log("long:",longitude)
+  console.log("lat:",latitude)
   var updatestr = "UPDATE "+dbname+" set longitude="+longitude+", latitude="+latitude
   updatestr += " WHERE firstname like '"+firstname+"' and lastname like '"+lastname+"';"
   var insertstr = "INSERT INTO tigertidal (firstname, lastname, longitude, latitude)"
   insertstr += " SELECT '"+firstname+"', '"+lastname+"', "+longitude+", "+latitude
   insertstr += " WHERE NOT EXISTS (SELECT 1 FROM "+dbname+" WHERE firstname like '"+firstname+"' and lastname like '"+lastname+"');"
   var flag = false;
+  console.log("updatestr:",updatestr)
+  console.log("insertstr:",insertstr)
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     client.query( updatestr, function(err, result) {
       done();
