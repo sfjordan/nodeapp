@@ -41,7 +41,7 @@ app.post('/db', function (request, response) {
   var insertstr = "INSERT INTO tigertidal (firstname, lastname, longitude, latitude)"
   insertstr += " SELECT '"+firstname+"', '"+lastname+"', "+longitude+", "+latitude
   insertstr += " WHERE NOT EXISTS (SELECT 1 FROM "+dbname+" WHERE firstname like '"+firstname+"' and lastname like '"+lastname+"');"
-  var flag = false;
+  var flag = false; 
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     client.query( updatestr, function(err, result) {
       done();
