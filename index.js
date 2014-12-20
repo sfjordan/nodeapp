@@ -23,7 +23,7 @@ app.get('/db', function (request, response) {
       else {
         var str = JSON.stringify(result.rows).split(']')[0].split('[')[1]
         var retstr = '{"activeUsers":['+str+']}'
-        console.log("retstr", str)
+        // console.log("retstr", str)
         response.send(retstr);
         }
     });
