@@ -36,10 +36,12 @@ app.post('/db', function (request, response) {
   var lastname = request.body.lastname
   var longitude = request.body.longitude
   var latitude = request.body.latitude
-  var updatestr = "UPDATE "+dbname+" set longitude="+longitude+", latitude="+latitude
+  var heading = request.body.heading
+  var speed = request.body.speed
+  var updatestr = "UPDATE "+dbname+" set longitude="+longitude+", latitude="+latitude+", heading="+heading+", speed="+speed
   updatestr += " WHERE firstname like '"+firstname+"' and lastname like '"+lastname+"';"
-  var insertstr = "INSERT INTO tigertidal (firstname, lastname, longitude, latitude)"
-  insertstr += " SELECT '"+firstname+"', '"+lastname+"', "+longitude+", "+latitude
+  var insertstr = "INSERT INTO tigertidal (firstname, lastname, longitude, latitude, heading, speed)"
+  insertstr += " SELECT '"+firstname+"', '"+lastname+"', "+longitude+", "+latitude+", "+heading+", "+speed
   insertstr += " WHERE NOT EXISTS (SELECT 1 FROM "+dbname+" WHERE firstname like '"+firstname+"' and lastname like '"+lastname+"');"
   var flag = false; 
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
