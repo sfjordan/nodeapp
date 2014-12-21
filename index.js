@@ -25,6 +25,7 @@ app.get('/db', function (request, response) {
         var retstr = '{"activeUsers":['+str+']}'
         // console.log("retstr", str)
         response.send(retstr);
+        response.end();
         }
     });
   });
