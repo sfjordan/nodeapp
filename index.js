@@ -45,31 +45,26 @@ app.post('/db', function (request, response) {
   var insertstr = "INSERT INTO tigertidal (firstname, lastname, classyear, longitude, latitude, heading, speed)"
   insertstr += " SELECT '"+firstname+"', '"+lastname+"', '"+classyear+"', "+longitude+", "+latitude+", "+heading+", "+speed
   insertstr += " WHERE NOT EXISTS (SELECT 1 FROM "+dbname+" WHERE firstname like '"+firstname+"' and lastname like '"+lastname+"');"
-  var flag = false; 
+  var success = true; 
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     client.query( updatestr, function(err, result) {
       done();
       if (err) {
-        console.error(err); response.send("Error: "+err)
-      }
-      else {
-        flag = true;
+        console.log(err); response.send("Error: "+err)
+        success = false;
       }
     });
     client.query( insertstr, function(err, result) {
       done();
       if (err) {
-        console.error(err); response.send("Error: "+err)
-      }
-      else {
-        flag = true;
+        console.log(err); response.send("Error: "+err)
+        success = false;
       }
     });
   });
-  if (flag)
+  if (success)
     response.status(200).end();
   else response.status(500).end();
-  response.send();
 })
 
 app.get('/', function(request, response) {
